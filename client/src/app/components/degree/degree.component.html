@@ -1,0 +1,178 @@
+<div class="container-fluid">
+  <div class="row main-body">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 table-area" id="dv1">
+      <div class="panel_area_head" style="padding: 8px;">
+        <span class="table-header-text">{{'degreeManagement' | translate}}</span>
+        <span style="float: right;">
+              <div class="input-group mb-3">
+                <input #searchValue aria-describedby="button-addon2" aria-label="Recipient's groupname"
+                       class="form-control"
+                       placeholder="{{'search' | translate}}" type="text">
+                <div class="input-group-append">
+                  <button (click)="search(searchValue.value)" class="btn btn-info" id="button-addon2"
+                          type="button"><i
+                    class="fa fa-search"></i></button>
+                </div>
+              </div>
+          </span>
+      </div>
+      <div class="table-responsive" style="margin-top: 15px; padding: 0 12px 12px;">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th class="action-area" scope="col">{{'actions' | translate}}</th>
+            <th scope="col">{{'degree' | translate}}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr
+            *ngFor="let degree of degrees | paginate: { itemsPerPage: limit, currentPage: currentPage,totalItems:count }"
+            name="logs">
+            <td>
+              <button (click)="getSelectedDegree(degree.id,'edit')" class="btn btn-info fa fa-edit tbl-btn"
+                      id="btn-edit"
+                      title="{{'edit' | translate}}"></button>&nbsp;
+              <button (click)="getSelectedDegree(degree.id,'delete')"
+                      class="btn btn-danger fa fa-trash tbl-btn"
+                      id="btn-delete"
+                      title="{{'delete' | translate}}"></button>
+            </td>
+            <td>{{degree.degree}}</td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="2"></td>
+          </tr>
+          <tr>
+            <td colspan="1">
+              <button class="btn btn-success fa fa-plus-circle" data-target="#addDegree"
+                      data-toggle="modal"
+                      title="{{'create' | translate}}"></button>
+            </td>
+            <td colspan="1" style="text-align: left;">
+              <pagination-controls (pageChange)="currentPage = $event;pagination(currentPage)"
+                                   [autoHide]="count <= limit"
+                                   nextLabel="{{'next' | translate}}"
+                                   previousLabel="{{'previous' | translate}}"
+                                   responsive="true"></pagination-controls>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Create Degree Modal-->
+<div aria-hidden="true" aria-labelledby="addDegreeLabel" class="modal fade bd-example-modal-lg"
+     id="addDegree"
+     role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{'addDegree' | translate}}</h5>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <div class="input-group-prepend">
+                        <span class="input-group-text modal-text-width"
+                              id="addDegreeLabel">{{'degree' | translate}}</span>
+          </div>
+          <input #degreeName (input)="null" aria-describedby="degree" class="form-control"
+                 id="addDegreeInput"
+                 required="required" type="text">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal"
+                type="button">{{'cancel' | translate}}</button>
+        <button (click)="addDegree(degreeName.value)" [disabled]="!degreeName.value"
+                class="btn btn-primary"
+                type="button">{{'save' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Degree Modal-->
+<div aria-hidden="true" aria-labelledby="editDegreeLabel"
+     class="modal fade bd-example-modal-lg"
+     id="editDegree"
+     role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{'editDegree' | translate}}</h5>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <div class="input-group-prepend">
+                        <span class="input-group-text modal-text-width"
+                              id="editDegreeLabel">{{'degree' | translate}}</span>
+          </div>
+          <input #typeName (input)="null" [value]="degree?.degree"
+                 aria-describedby="degree" class="form-control"
+                 required="required" type="text">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal"
+                type="button">{{'cancel' | translate}}</button>
+        <button (click)="editDegree(typeName.value)" [disabled]="!typeName.value"
+                class="btn btn-primary"
+                type="button">{{'save' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Delete Degree Modal-->
+<div aria-hidden="true" aria-labelledby="deleteDegreeLabel"
+     class="modal fade bd-example-modal-lg"
+     id="deleteDegree"
+     role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{'deleteDegree' | translate}}</h5>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <div class="input-group-prepend">
+                        <span class="input-group-text modal-text-width"
+                              id="deleteDegreeLabel">{{'degree' | translate}}</span>
+          </div>
+          <input (input)="null" [value]="degree?.degree" aria-describedby="degree"
+                 class="form-control"
+                 disabled
+                 required="required" type="text">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal"
+                type="button">{{'cancel' | translate}}</button>
+        <button (click)="deleteDegree()"
+                class="btn btn-primary"
+                type="button">{{'delete' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  color="#339CFF"
+  size="default"
+  type="ball-spin-clockwise">
+</ngx-spinner>

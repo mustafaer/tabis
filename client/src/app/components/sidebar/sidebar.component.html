@@ -1,0 +1,22 @@
+<br>
+<br><br>
+<div style="text-align: center"><span><strong>{{'welcome' | translate}}</strong></span></div>
+<br>
+<ul class="list-group" style="min-width: 250px;">
+  <li class="list-group-item" [routerLink]="['dashboard']">
+    <span class="fas fa-home" aria-hidden="true"></span>
+    {{ 'dashboard' | translate }}
+  </li>
+  <li *ngIf="userType === 0" class="list-group-item" [routerLink]="['degree']">
+    <span class="fas fa-list-alt" aria-hidden="true"></span>
+    {{ 'degreeManagement' | translate }}
+  </li>
+  <li *ngIf="userType === 0" class="list-group-item" [routerLink]="['study-branch']">
+    <span class="fas fa-list-alt" aria-hidden="true"></span>
+    {{ 'studyBranchManagement' | translate }}
+  </li>
+  <li *ngIf="userType === 0" class="list-group-item" [routerLink]="['student']">
+    <span class="fas fa-list-alt" aria-hidden="true"></span>
+    {{ 'studentManagement' | translate }}
+  </li>
+</ul>

@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+@import "app/components/login/login.component.scss";
+@import "app/components/header/header.component.scss";
+@import "app/components/footer/footer.component.scss";
+@import "app/components/sidebar/sidebar.component.scss";
+@import "app/components/degree/degree.component.scss";
+
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+  line-height: 1.2;
+  background-color: #e6e7e8;
+  margin: 0px;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 400;
+}

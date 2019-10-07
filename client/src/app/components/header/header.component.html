@@ -1,0 +1,24 @@
+<nav style="position: fixed; top:0; width: 100%; z-index: 100000000; padding: 5px 16px; padding-left: 8px; background-color: #367fa9; color: white" class="navbar navbar-expand-lg ">
+  <span style="width: 30px; height: 30px; background-color: gray;padding: 3px; vertical-align: middle; cursor: pointer;" (click)="toggleSidebar()"><hr style="color: whitesmoke; margin: 3px;border: 1px solid;"><hr style="color: whitesmoke; margin: 3px;border: 1px solid;"><hr style="color: whitesmoke;margin: 3px;border: 1px solid;"><hr style="color: whitesmoke;margin: 3px; border: 1px solid;"></span>
+  &nbsp;&nbsp;<a style="padding:0; float: left;" class="nav-link" [routerLink]="['']">
+  <b>{{'appTitle' | translate}}</b>
+</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse"  id="navbarNavDropdown">
+    <ul class="nav navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ 'user' | translate }}
+        </a>
+        <div class="dropdown-menu dropdown-menu-right bg-dark" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item text-light" [routerLink]="['profile']">{{ 'profile' | translate }}</a>
+          <div class="dropdown-divider"></div>
+          <a (click)="logOut()" class="dropdown-item text-light" href="javascript:void(0)">{{ 'logout' | translate }}</a>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</nav>
