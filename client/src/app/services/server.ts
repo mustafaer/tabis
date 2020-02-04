@@ -1,12 +1,7 @@
-const DEVELOPMENT_MODE = true;
+import {environment} from '../../environments/environment';
 
 let serverAddress: string;
-
-if (DEVELOPMENT_MODE) {
-  serverAddress = 'http://localhost:8080';
-} else {
-  serverAddress = 'https://example.com';
-}
+serverAddress = environment.baseURL;
 
 export const server = {
   login: serverAddress + '/login',
