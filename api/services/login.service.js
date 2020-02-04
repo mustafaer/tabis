@@ -60,7 +60,6 @@ router.post('', async (req, res) => {
 });
 
 router.post('/passwordRequest', async (req, res) => {
-
     try {
         let requestData = req.body;
         let email = requestData.email;
@@ -112,12 +111,12 @@ router.post('/passwordRequest', async (req, res) => {
 
                 let hash = bcrypt.hashSync(myPlaintextPassword, saltRounds);
 
-                const check_2 = `SELECT setting_value
+                const check_2 = `SELECT value
                                  FROM tbl_application_setting
                                  WHERE state = $1
-                                   AND setting = $2`;
+                                   AND key = $2`;
                 let checkResult2 = await db.query(check_2, [1, 'email_template']);
-                checkResult2 = checkResult2.rows[0].setting_value;
+                checkResult2 = checkResult2.rows[0].value;
 
                 let resetUrl = config.frontEndUrl + '/password-reset/?token=' + hash;
 

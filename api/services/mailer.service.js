@@ -6,10 +6,10 @@ function sendEmail(email_variables) {
 
         db.query(`SELECT *
                   FROM tbl_application_setting
-                  WHERE setting = 'email_smtp_hostname'
-                     OR setting = 'email_smtp_port'
-                     OR setting = 'email_address'
-                     OR setting = 'email_password' AND state = '1'
+                  WHERE key = 'email_smtp_hostname'
+                     OR key = 'email_smtp_port'
+                     OR key = 'email_address'
+                     OR key = 'email_password' AND state = '1'
                   ORDER BY id ASC`, function (err, result) {
             if (err) {
 
@@ -20,8 +20,8 @@ function sendEmail(email_variables) {
                 let vl;
 
                 for (let i = 0; i < result.rowCount; i++) {
-                    ky = result.rows[i].setting;
-                    vl = result.rows[i].setting_value;
+                    ky = result.rows[i].key;
+                    vl = result.rows[i].value;
                     dict[ky] = vl;
                 }
 
@@ -76,10 +76,10 @@ function checkEmailConfiguration(res) {
 
         db.query(`SELECT *
                   FROM tbl_application_setting
-                  WHERE setting = 'email_smtp_hostname'
-                     OR setting = 'email_smtp_port'
-                     OR setting = 'email_address'
-                     OR setting = 'email_password' AND state = '1'
+                  WHERE key = 'email_smtp_hostname'
+                     OR key = 'email_smtp_port'
+                     OR key = 'email_address'
+                     OR key = 'email_password' AND state = '1'
                   ORDER BY id ASC`, function (err, result) {
             if (err) {
 
@@ -90,8 +90,8 @@ function checkEmailConfiguration(res) {
                 let vl;
 
                 for (let i = 0; i < result.rowCount; i++) {
-                    ky = result.rows[i].setting;
-                    vl = result.rows[i].setting_value;
+                    ky = result.rows[i].key;
+                    vl = result.rows[i].value;
                     dict[ky] = vl;
                 }
 

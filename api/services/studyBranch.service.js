@@ -23,7 +23,7 @@ router.get('/studyBranches', async (req, res) => {
 
         if (userStatu === 0) {
 
-            let studyBranchQuery = 'SELECT * FROM tbl_study_branch WHERE study_branch ILIKE $1 AND state=$2 ORDER BY study_branch LIMIT $3 OFFSET $4';
+            let studyBranchQuery = 'SELECT * FROM tbl_study_branch WHERE name ILIKE $1 AND state=$2 ORDER BY name LIMIT $3 OFFSET $4';
 
             let studyBranchResultCount = await db.query(studyBranchQuery, ['%' + searchString + '%', 1, null, null]);
             let studyBranchResult = await db.query(studyBranchQuery, ['%' + searchString + '%', 1, limit, offset]);
@@ -60,7 +60,7 @@ router.get('/view', async (req, res) => {
 
         if (userStatu === 0) {
 
-            let studyBranchQuery = 'SELECT id,study_branch FROM tbl_study_branch WHERE id=$1 AND state=$2';
+            let studyBranchQuery = 'SELECT id,name FROM tbl_study_branch WHERE id=$1 AND state=$2';
             let studyBranchResult = await db.query(studyBranchQuery, [studyBranchId, 1]);
 
             studyBranchResult = studyBranchResult.rows[0];
@@ -89,9 +89,9 @@ router.post('/add', async (req, res) => {
 
         if (userStatu === 0) {
 
-            const checkStudyBranchQuery = `SELECT study_branch
+            const checkStudyBranchQuery = `SELECT name
                                            FROM tbl_study_branch
-                                           WHERE study_branch = $1
+                                           WHERE name = $1
                                              AND state = $2`;
             let checkStudyBranchResult = await db.query(checkStudyBranchQuery, [studyBranch, 1]);
             checkStudyBranchResult = checkStudyBranchResult.rows[0];
@@ -100,7 +100,7 @@ router.post('/add', async (req, res) => {
                 return res.status(400).send({detail: messages['error.studyBranch.save.studyBranch.exist']});
             } else {
 
-                const studyBranchRegisterQuery = `INSERT INTO tbl_study_branch (study_branch)
+                const studyBranchRegisterQuery = `INSERT INTO tbl_study_branch (name)
                                                   VALUES ($1)`;
 
                 let checkStudyBranchResult = await db.query(studyBranchRegisterQuery, [studyBranch]);
@@ -131,9 +131,9 @@ router.post('/view', async (req, res) => {
 
         if (userStatu === 0) {
 
-            const checkStudyBranchQuery = `SELECT study_branch
+            const checkStudyBranchQuery = `SELECT name
                                            FROM tbl_study_branch
-                                           WHERE study_branch = $1
+                                           WHERE name = $1
                                              AND state = $2
                                              AND id != $3`;
             let checkStudyBranchResult = await db.query(checkStudyBranchQuery, [studyBranch, 1, studyBranchId]);
@@ -142,7 +142,7 @@ router.post('/view', async (req, res) => {
             if (checkStudyBranchResult) {
                 return res.status(400).send({detail: messages['error.studyBranch.edit.studyBranch.exist']});
             } else {
-                const updateStudyBranchQuery = 'UPDATE tbl_study_branch SET study_branch=$1 WHERE id=$2';
+                const updateStudyBranchQuery = 'UPDATE tbl_study_branch SET name=$1 WHERE id=$2';
                 let updateStudyBranchResult = await db.query(updateStudyBranchQuery, [studyBranch, studyBranchId]);
                 if (updateStudyBranchResult.rowCount >= 1) {
 

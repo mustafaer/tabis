@@ -40,16 +40,16 @@ router.get('/users', async (req, res) => {
                                          tu.education_type        as educationType,
                                          tu.daytime_student_count as daytimeStudentCount,
                                          tu.evening_student_count as eveningStudentCount,
-                                         td.degree,
+                                         td.name,
                                          td.id                    AS degreeId,
-                                         tsb.study_branch         as studyBranch,
+                                         tsb.name                 as studyBranch,
                                          tsb.id                   AS studyBranchId
                                   FROM tbl_user AS tu
                                            LEFT JOIN
                                        tbl_study_branch AS tsb ON tu.advisor_study_branch_id = tsb.id
                                            LEFT JOIN tbl_degree AS td ON tu.degree_id = td.id
                                   WHERE (tu.username ILIKE $1 OR tu.full_name ILIKE $1 OR
-                                         td.degree ILIKE $1 OR tsb.study_branch ILIKE $1)
+                                         td.name ILIKE $1 OR tsb.name ILIKE $1)
                                     AND tu.state = $2
                                     AND tu.user_type = $3
                                     AND tu.app_year = $4
@@ -102,9 +102,9 @@ router.get('/view', async (req, res) => {
                                        tu.education_type        as educationType,
                                        tu.daytime_student_count as daytimeStudentCount,
                                        tu.evening_student_count as eveningStudentCount,
-                                       td.degree,
+                                       td.name,
                                        td.id                    AS degreeId,
-                                       tsb.study_branch         as studyBranch,
+                                       tsb.name                 as studyBranch,
                                        tsb.id                   AS studyBranchId
                                 FROM tbl_user AS tu
                                          LEFT JOIN
@@ -336,7 +336,7 @@ router.post('/import', async (req, res) => {
                         if (group_no_id) {
                             group_no_id = group_no_id.id;
                         }
-                        const check_user = 'SELECT username,email FROM tbl_users WHERE ((username=$1 AND state=$2) OR (email=$3 AND state=$2)) AND app_year=$4';
+                        const check_user = 'SELECT username,email FROM tbl_user WHERE ((username=$1 AND state=$2) OR (email=$3 AND state=$2)) AND app_year=$4';
                         let check_result = await db.query(check_user, [username, 1, email, 2019]);
                         check_result = check_result.rows[0];
 
@@ -345,9 +345,9 @@ router.post('/import', async (req, res) => {
                                 notImportedUsers.push(datas[i]);
                             }
                         } else {
-                            const user_register_query = 'INSERT INTO tbl_users (namesurname, username, password, email, group_no_id, app_year, statu, state) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)';
+                            const user_register_query = 'INSERT INTO tbl_user (full_name, username, password, email, app_year, user_type, state) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)';
 
-                            let user_register = await db.query(user_register_query, [namesurname, username, password, email, group_no_id, 2019, requestUserType, 1]);
+                            let user_register = await db.query(user_register_query, [namesurname, username, password, email, 2019, requestUserType, 1]);
 
                             if (user_register.rowCount < 1) {
                                 notImportedUsers.push(datas[i]);

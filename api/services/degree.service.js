@@ -21,7 +21,7 @@ router.get('/degrees', async (req, res) => {
         }
 
         if (userStatu === 0) {
-            let degreeQuery = 'SELECT * FROM tbl_degree WHERE degree ILIKE $1 AND state=$2 ORDER BY degree LIMIT $3 OFFSET $4';
+            let degreeQuery = 'SELECT * FROM tbl_degree WHERE name ILIKE $1 AND state=$2 ORDER BY name LIMIT $3 OFFSET $4';
 
             let degreeResultCount = await db.query(degreeQuery, ['%' + searchString + '%', 1, null, null]);
             let degreeResult = await db.query(degreeQuery, ['%' + searchString + '%', 1, limit, offset]);
@@ -57,7 +57,7 @@ router.get('/view', async (req, res) => {
 
         if (userStatu === 0) {
 
-            let degreeQuery = 'SELECT id,degree FROM tbl_degree WHERE id=$1 AND state=$2';
+            let degreeQuery = 'SELECT id,name FROM tbl_degree WHERE id=$1 AND state=$2';
             let degreeResult = await db.query(degreeQuery, [degreeId, 1]);
 
             degreeResult = degreeResult.rows[0];
@@ -82,11 +82,15 @@ router.post('/add', async (req, res) => {
         let requestData = req.body;
         let degree = requestData.degree;
 
+        if ((degree.name).trim() === '') {
+            return res.status(400).send({detail: messages['error.degree.save']});
+        }
+
         if (userStatu === 0) {
 
-            const checkDegreeQuery = `SELECT degree
+            const checkDegreeQuery = `SELECT name
                                       FROM tbl_degree
-                                      WHERE degree = $1
+                                      WHERE name = $1
                                         AND state = $2`;
             let checkDegreeResult = await db.query(checkDegreeQuery, [degree, 1]);
             checkDegreeResult = checkDegreeResult.rows[0];
@@ -95,7 +99,7 @@ router.post('/add', async (req, res) => {
                 return res.status(400).send({detail: messages['error.degree.save.degree.exist']});
             } else {
 
-                const degreeRegisterQuery = `INSERT INTO tbl_degree (degree)
+                const degreeRegisterQuery = `INSERT INTO tbl_degree (name)
                                              VALUES ($1)`;
 
                 let checkDegreeResult = await db.query(degreeRegisterQuery, [degree]);
@@ -126,9 +130,9 @@ router.post('/view', async (req, res) => {
 
         if (userStatu === 0) {
 
-            const checkDegreeQuery = `SELECT degree
+            const checkDegreeQuery = `SELECT name
                                       FROM tbl_degree
-                                      WHERE degree = $1
+                                      WHERE name = $1
                                         AND state = $2
                                         AND id != $3`;
             let checkDegreeResult = await db.query(checkDegreeQuery, [degree, 1, degreeId]);
@@ -137,7 +141,7 @@ router.post('/view', async (req, res) => {
             if (checkDegreeResult) {
                 return res.status(400).send({detail: messages['error.degree.edit.degree.exist']});
             } else {
-                const updateDegreeQuery = 'UPDATE tbl_degree SET degree=$1 WHERE id=$2';
+                const updateDegreeQuery = 'UPDATE tbl_degree SET name=$1 WHERE id=$2';
                 let updateDegreeResult = await db.query(updateDegreeQuery, [degree, degreeId]);
                 if (updateDegreeResult.rowCount >= 1) {
 
