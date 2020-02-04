@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {server} from '../../services/server';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {AlertifyService} from '../../services/alertify/alertify.service';
 import {AuthService} from '../../services/auth/auth.service';
-import {DegreeModel} from './degreeModel';
+import {Degree} from './degree.model';
 
 @Component({
   selector: 'app-degree',
@@ -19,12 +19,14 @@ export class DegreeComponent implements OnInit {
   currentPage: number;
   valueOfSearch: string;
   orderByValue: string;
-  degree: DegreeModel;
+  degreeList: any = [];
+  degree: Degree;
   degreeId: number;
 
   constructor(private spinner: NgxSpinnerService,
               private authService: AuthService,
               private alertify: AlertifyService) {
+    this.degree = new Degree();
     this.limit = 15;
     this.valueOfSearch = '';
     this.orderByValue = 'id';
@@ -35,21 +37,17 @@ export class DegreeComponent implements OnInit {
   }
 
   getDegrees(pageNo) {
-    this.degrees = [];
     this.spinner.show();
     const offset = (pageNo - 1) * this.limit;
     this.authService.ServerGet(server.degree + '/?limit=' + this.limit + '&offset=' + offset + '&search=' + this.valueOfSearch)
-      .subscribe(res => {
-        // @ts-ignore
-        this.degrees = res.result;
+      .subscribe((res: any = []) => {
+        this.degreeList = res.result;
         this.activePage = pageNo;
-        // @ts-ignore
         this.count = res.count;
       }, err => {
         if (err.status >= 400 || err.status < 500) {
           this.alertify.warning(err.error.detail);
         }
-        this.spinner.hide();
       }, () => {
         this.spinner.hide();
       });
@@ -58,8 +56,7 @@ export class DegreeComponent implements OnInit {
   getSelectedDegree(degreeId, requestReference) {
 
     this.authService.ServerGet(server.viewDegree + '/?degreeId=' + degreeId)
-      .subscribe(res => {
-        // @ts-ignore
+      .subscribe((res: any = []) => {
         this.degree = res;
         this.degreeId = this.degree.id;
       }, err => {
@@ -80,7 +77,6 @@ export class DegreeComponent implements OnInit {
   }
 
   search(searchValue) {
-    this.degrees = [];
     this.valueOfSearch = searchValue;
     this.getDegrees(1);
   }
@@ -96,8 +92,7 @@ export class DegreeComponent implements OnInit {
       degree
     };
     this.authService.ServerPost(server.addDegree, obj)
-      .subscribe(res => {
-        // @ts-ignore
+      .subscribe((res: any = []) => {
         this.alertify.success(res.detail);
       }, err => {
         if (err.status >= 400 || err.status < 500) {
@@ -112,16 +107,15 @@ export class DegreeComponent implements OnInit {
       });
   }
 
-  editDegree(degree) {
+  editDegree() {
 
     const obj = {
-      degree: degree,
+      degree: this.degree.name,
       degreeId: this.degreeId
     };
 
     this.authService.ServerPost(server.viewDegree, obj)
-      .subscribe(res => {
-        // @ts-ignore
+      .subscribe((res: any = []) => {
         this.alertify.success(res.detail);
       }, err => {
         if (err.status >= 400 || err.status < 500) {
@@ -143,8 +137,7 @@ export class DegreeComponent implements OnInit {
     };
 
     this.authService.ServerPost(server.deleteDegree, obj)
-      .subscribe(res => {
-        // @ts-ignore
+      .subscribe((res: any = []) => {
         this.alertify.success(res.detail);
       }, err => {
         if (err.status >= 400 || err.status < 500) {

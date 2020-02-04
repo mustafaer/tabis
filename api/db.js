@@ -45,14 +45,14 @@ function queryDatabase() {
         CREATE TABLE IF NOT EXISTS tbl_study_branch
         (
             id           serial PRIMARY KEY NOT NULL,
-            study_branch VARCHAR(100)       NOT NULL UNIQUE,
+            name VARCHAR(100)       NOT NULL UNIQUE,
             state        INTEGER            NOT NULL DEFAULT 1
         );
 
         CREATE TABLE IF NOT EXISTS tbl_degree
         (
             id     serial PRIMARY KEY NOT NULL,
-            degree VARCHAR(100)       NOT NULL UNIQUE,
+            name VARCHAR(100)       NOT NULL UNIQUE,
             state  INTEGER            NOT NULL DEFAULT 1
         );
 
@@ -81,8 +81,8 @@ function queryDatabase() {
         CREATE TABLE IF NOT EXISTS tbl_application_setting
         (
             id            serial PRIMARY KEY NOT NULL,
-            setting       VARCHAR(100)       NOT NULL UNIQUE,
-            setting_value VARCHAR(10000),
+            key       VARCHAR(100)       NOT NULL UNIQUE,
+            value VARCHAR(10000),
             state         INTEGER            NOT NULL DEFAULT 1
         );
 
@@ -112,28 +112,28 @@ function queryDatabase() {
             ADD FOREIGN KEY ("advisor_id") REFERENCES "tbl_user" ("id");`;
 
     const Settings = `
-        INSERT INTO tbl_application_setting (setting, setting_value)
+        INSERT INTO tbl_application_setting (key, value)
         VALUES ('student_access_state', 1)
-        ON CONFLICT (setting) DO NOTHING;
-        INSERT INTO tbl_application_setting (setting, setting_value)
+        ON CONFLICT (key) DO NOTHING;
+        INSERT INTO tbl_application_setting (key, value)
         VALUES ('advisor_access_state', 1)
-        ON CONFLICT (setting) DO NOTHING;
-        INSERT INTO tbl_application_setting (setting, setting_value)
+        ON CONFLICT (key) DO NOTHING;
+        INSERT INTO tbl_application_setting (key, value)
         VALUES ('app_year', 2019)
-        ON CONFLICT (setting) DO NOTHING;
-        INSERT INTO tbl_application_setting (setting, setting_value)
+        ON CONFLICT (key) DO NOTHING;
+        INSERT INTO tbl_application_setting (key, value)
         VALUES ('email_smtp_hostname', 'smtp.gmail.com')
-        ON CONFLICT (setting) DO NOTHING;
-        INSERT INTO tbl_application_setting (setting, setting_value)
+        ON CONFLICT (key) DO NOTHING;
+        INSERT INTO tbl_application_setting (key, value)
         VALUES ('email_smtp_port', 465)
-        ON CONFLICT (setting) DO NOTHING;
-        INSERT INTO tbl_application_setting (setting, setting_value)
+        ON CONFLICT (key) DO NOTHING;
+        INSERT INTO tbl_application_setting (key, value)
         VALUES ('email_address', 'bidesmanagement@gmail.com')
-        ON CONFLICT (setting) DO NOTHING;
-        INSERT INTO tbl_application_setting (setting, setting_value)
-        VALUES ('email_password', 'U1t28nKt4WuA')
-        ON CONFLICT (setting) DO NOTHING;
-        INSERT INTO tbl_application_setting (setting, setting_value)
+        ON CONFLICT (key) DO NOTHING;
+        INSERT INTO tbl_application_setting (key, value)
+        VALUES ('email_password', 'asdasdasd')
+        ON CONFLICT (key) DO NOTHING;
+        INSERT INTO tbl_application_setting (key, value)
         VALUES ('email_template', '<div style="width: 100%; background-color: lightgray;">
                         <div style="background-color: gray; padding: 16px 32px;">
                         <strong style="font-size: 18px; color: white;">TABİS</strong>
@@ -161,25 +161,25 @@ function queryDatabase() {
         VALUES (1, 'admin', 'q', 'Admin', 'bidesmanagement@gmail.com', 0)
         ON CONFLICT (id) DO NOTHING;
 
-        INSERT INTO tbl_study_branch (study_branch)
+        INSERT INTO tbl_study_branch (name)
         VALUES ('Elektrik')
         ON CONFLICT (study_branch) DO NOTHING;
-        INSERT INTO tbl_study_branch (study_branch)
+        INSERT INTO tbl_study_branch (name)
         VALUES ('Elektronik')
-        ON CONFLICT (study_branch) DO NOTHING;
+        ON CONFLICT (name) DO NOTHING;
 
-        INSERT INTO tbl_degree (degree)
+        INSERT INTO tbl_degree (name)
         VALUES ('Prof. Dr.')
         ON CONFLICT (degree) DO NOTHING;
-        INSERT INTO tbl_degree (degree)
+        INSERT INTO tbl_degree (name)
         VALUES ('Doç. Dr.')
         ON CONFLICT (degree) DO NOTHING;
-        INSERT INTO tbl_degree (degree)
+        INSERT INTO tbl_degree (name)
         VALUES ('Dr. Öğr. Üyesi')
         ON CONFLICT (degree) DO NOTHING;
-        INSERT INTO tbl_degree (degree)
+        INSERT INTO tbl_degree (name)
         VALUES ('Öğr. Gör.')
-        ON CONFLICT (degree) DO NOTHING;`;
+        ON CONFLICT (name) DO NOTHING;`;
 
     client
         .query(Tables)
