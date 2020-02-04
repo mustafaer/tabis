@@ -4,6 +4,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {AlertifyService} from '../../services/alertify/alertify.service';
 import {AuthService} from '../../services/auth/auth.service';
 import {Degree} from './degree.model';
+import {RequestPayload} from '../../shared/request-payload.model';
 
 @Component({
   selector: 'app-degree',
@@ -12,24 +13,19 @@ import {Degree} from './degree.model';
 })
 export class DegreeComponent implements OnInit {
 
-  degrees: any;
   count: number;
   activePage: any;
-  limit: number;
   currentPage: number;
-  valueOfSearch: string;
-  orderByValue: string;
-  degreeList: any = [];
+  requestPayload: RequestPayload;
   degree: Degree;
-  degreeId: number;
+  degreeList: any = [];
 
   constructor(private spinner: NgxSpinnerService,
               private authService: AuthService,
               private alertify: AlertifyService) {
+
     this.degree = new Degree();
-    this.limit = 15;
-    this.valueOfSearch = '';
-    this.orderByValue = 'id';
+    this.requestPayload = new RequestPayload();
   }
 
   ngOnInit() {
@@ -38,8 +34,9 @@ export class DegreeComponent implements OnInit {
 
   getDegrees(pageNo) {
     this.spinner.show();
-    const offset = (pageNo - 1) * this.limit;
-    this.authService.ServerGet(server.degree + '/?limit=' + this.limit + '&offset=' + offset + '&search=' + this.valueOfSearch)
+    const offset = (pageNo - 1) * this.requestPayload.limit;
+    this.authService.ServerGet(server.degree +
+      `/?limit=${this.requestPayload.limit}&offset=${offset}&search=${this.requestPayload.valueOfSearch}`)
       .subscribe((res: any = []) => {
         this.degreeList = res.result;
         this.activePage = pageNo;
@@ -48,9 +45,14 @@ export class DegreeComponent implements OnInit {
         if (err.status >= 400 || err.status < 500) {
           this.alertify.warning(err.error.detail);
         }
+        this.spinner.hide();
       }, () => {
         this.spinner.hide();
       });
+  }
+
+  viewAddDegree() {
+    this.degree = new Degree();
   }
 
   getSelectedDegree(degreeId, requestReference) {
@@ -58,7 +60,6 @@ export class DegreeComponent implements OnInit {
     this.authService.ServerGet(server.viewDegree + '/?degreeId=' + degreeId)
       .subscribe((res: any = []) => {
         this.degree = res;
-        this.degreeId = this.degree.id;
       }, err => {
         if (err.status >= 400 || err.status < 500) {
           this.alertify.warning(err.error.detail);
@@ -77,7 +78,7 @@ export class DegreeComponent implements OnInit {
   }
 
   search(searchValue) {
-    this.valueOfSearch = searchValue;
+    this.requestPayload.valueOfSearch = searchValue;
     this.getDegrees(1);
   }
 
@@ -85,11 +86,11 @@ export class DegreeComponent implements OnInit {
     this.getDegrees(pageNo);
   }
 
-  addDegree(degree) {
+  addDegree() {
     this.spinner.show();
 
     const obj = {
-      degree
+      degree: this.degree.name
     };
     this.authService.ServerPost(server.addDegree, obj)
       .subscribe((res: any = []) => {
@@ -111,7 +112,7 @@ export class DegreeComponent implements OnInit {
 
     const obj = {
       degree: this.degree.name,
-      degreeId: this.degreeId
+      degreeId: this.degree.id
     };
 
     this.authService.ServerPost(server.viewDegree, obj)
@@ -133,7 +134,7 @@ export class DegreeComponent implements OnInit {
   deleteDegree() {
     this.spinner.show();
     const obj = {
-      degreeId: this.degreeId
+      degreeId: this.degree.id
     };
 
     this.authService.ServerPost(server.deleteDegree, obj)

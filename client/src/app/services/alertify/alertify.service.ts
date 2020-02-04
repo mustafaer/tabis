@@ -8,16 +8,6 @@ export class AlertifyService {
   constructor() {
   }
 
-  confirm(message: string, okCallback: () => any) {
-    alertify.confirm(message, (e) => {
-      if (e) {
-        okCallback();
-      } else {
-        // do nothing
-      }
-    });
-  }
-
   success(message: string) {
     alertify.set('notifier', 'position', 'bottom-right');
     alertify.success(message);
@@ -31,10 +21,5 @@ export class AlertifyService {
   warning(message: string) {
     alertify.set('notifier', 'position', 'bottom-right');
     alertify.warning(message);
-  }
-
-  message(message: string) {
-    alertify.set('notifier', 'position', 'bottom-right');
-    alertify.message(message);
   }
 }

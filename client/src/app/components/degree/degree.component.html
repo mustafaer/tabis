@@ -26,7 +26,7 @@
           </thead>
           <tbody>
           <tr
-            *ngFor="let degree of degreeList | paginate: { itemsPerPage: limit, currentPage: currentPage,totalItems:count }"
+            *ngFor="let degree of degreeList | paginate: { itemsPerPage: requestPayload.limit, currentPage: currentPage,totalItems:count }"
             name="logs">
             <td>
               <button (click)="getSelectedDegree(degree.id,'edit')" class="btn btn-info fa fa-edit tbl-btn"
@@ -47,12 +47,12 @@
           <tr>
             <td colspan="1">
               <button class="btn btn-success fa fa-plus-circle" data-target="#addDegree"
-                      data-toggle="modal"
+                      data-toggle="modal" (click)="viewAddDegree()"
                       title="{{'create' | translate}}"></button>
             </td>
             <td colspan="1" style="text-align: left;">
               <pagination-controls (pageChange)="currentPage = $event;pagination(currentPage)"
-                                   [autoHide]="count <= limit"
+                                   [autoHide]="count <= requestPayload.limit"
                                    nextLabel="{{'next' | translate}}"
                                    previousLabel="{{'previous' | translate}}"
                                    responsive="true"></pagination-controls>
@@ -83,7 +83,7 @@
                         <span class="input-group-text modal-text-width"
                               id="addDegreeLabel">{{'degree' | translate}}</span>
           </div>
-          <input #degreeName (input)="null" aria-describedby="degree" class="form-control"
+          <input [(ngModel)]="degree.name" aria-describedby="degree" class="form-control"
                  id="addDegreeInput"
                  required="required" type="text">
         </div>
@@ -91,7 +91,7 @@
       <div class="modal-footer">
         <button class="btn btn-secondary" data-dismiss="modal"
                 type="button">{{'cancel' | translate}}</button>
-        <button (click)="addDegree(degreeName.value)" [disabled]="!degreeName.value"
+        <button (click)="addDegree()" [disabled]="degree.name == ''"
                 class="btn btn-primary"
                 type="button">{{'save' | translate}}</button>
       </div>
@@ -152,7 +152,7 @@
                         <span class="input-group-text modal-text-width"
                               id="deleteDegreeLabel">{{'degree' | translate}}</span>
           </div>
-          <input (input)="null" [value]="degree?.degree" aria-describedby="degree"
+          <input [value]="degree?.name" aria-describedby="degree"
                  class="form-control"
                  disabled
                  required="required" type="text">
