@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../services/auth/auth.service';
 import {Router} from '@angular/router';
 
@@ -17,7 +17,7 @@ export class LoginLayoutComponent implements OnInit {
   }
 
   checkToken() {
-    const token = this.authService.token();
+    const token = this.authService.getToken();
     if (token !== null) {
       this.router.navigate(['/dashboard']);
     }
