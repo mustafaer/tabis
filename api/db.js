@@ -155,7 +155,7 @@ function queryDatabase() {
                         </div>
                         </div>
                         </div>')
-        ON CONFLICT (setting) DO NOTHING;
+        ON CONFLICT (key) DO NOTHING;
 
         INSERT INTO tbl_user (id, username, password, full_name, email, user_type)
         VALUES (1, 'admin', 'q', 'Admin', 'bidesmanagement@gmail.com', 0)
@@ -163,20 +163,20 @@ function queryDatabase() {
 
         INSERT INTO tbl_study_branch (name)
         VALUES ('Elektrik')
-        ON CONFLICT (study_branch) DO NOTHING;
+        ON CONFLICT (name) DO NOTHING;
         INSERT INTO tbl_study_branch (name)
         VALUES ('Elektronik')
         ON CONFLICT (name) DO NOTHING;
 
         INSERT INTO tbl_degree (name)
         VALUES ('Prof. Dr.')
-        ON CONFLICT (degree) DO NOTHING;
+        ON CONFLICT (name) DO NOTHING;
         INSERT INTO tbl_degree (name)
         VALUES ('Doç. Dr.')
-        ON CONFLICT (degree) DO NOTHING;
+        ON CONFLICT (name) DO NOTHING;
         INSERT INTO tbl_degree (name)
         VALUES ('Dr. Öğr. Üyesi')
-        ON CONFLICT (degree) DO NOTHING;
+        ON CONFLICT (name) DO NOTHING;
         INSERT INTO tbl_degree (name)
         VALUES ('Öğr. Gör.')
         ON CONFLICT (name) DO NOTHING;`;
